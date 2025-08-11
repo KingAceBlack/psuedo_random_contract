@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mint NFT</title>
+</head>
+<body>
+  <h1>Free NFT Mint</h1>
+  <input type="text" id="wallet" placeholder="Enter wallet address" style="width:300px;">
+  <button id="mintBtn">Mint Now</button>
+
+  <p id="result"></p>
+
+  <script>
+    document.getElementById('mintBtn').addEventListener('click', async () => {
+      const address = document.getElementById('wallet').value.trim();
+      if (!address) {
+        alert('Enter a wallet address!');
+        return;
+      }
+
+      const res = await fetch('/api/mint', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address })
+      });
+
+      const data = await res.json();
+      document.getElementById('result').innerText =
+        data.success
+          ? `✅ Minted! TX Hash: ${data.txHash}`
+          : `❌ Error: ${data.error}`;
+    });
+  </script>
+</body>
+</html>
