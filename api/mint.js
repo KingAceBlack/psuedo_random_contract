@@ -30,7 +30,7 @@ export default async function handler(req, res) {
     const _receiver = address;
     const _tokenId = 0n; // Token ID is 0
     const _quantity = BigInt(quantity);
-    const _currency = '0x0000000000000000000000000000000000000000'; // Native ETH (zero address)
+    const _currency = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'; // Native ETH (special address)
     const _pricePerToken = parseEther('0.00001'); // 0.00001 ETH per token
     
     // Empty allowlist proof for public mint
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
       proof: [], // empty array for public mint
       quantityLimitPerWallet: 0n, // 0 means no limit or use default
       pricePerToken: parseEther('0.00001'), // must match _pricePerToken above
-      currency: '0x0000000000000000000000000000000000000000' // must match _currency above
+      currency: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE' // must match _currency above
     };
     
     const _data = '0x'; // empty bytes
