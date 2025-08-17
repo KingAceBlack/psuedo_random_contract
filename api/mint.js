@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     });
 
     const txHash = await client.writeContract({
-      address: '0x5E3e89838E344e64F783f532d289f4bB2B520459', // your contract
+      address: '0x717731d5bfc67c105ac723FE461FcdC808930fB1', // your contract
       abi,
       functionName: 'claim',
       args: [
