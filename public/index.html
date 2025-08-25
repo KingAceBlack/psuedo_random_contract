@@ -77,33 +77,51 @@
     }
 
     .chest {
-      width: 128px;
-      height: 64px;
+      width: 128px; /* 64px * 2 scale */
+      height: 64px; /* 32px * 2 scale */
       background-image: url('chest.png');
-      background-size: contain;
+      background-size: 1408px 64px; /* 22 frames * 64px width, 32px height * 2 scale */
       background-repeat: no-repeat;
-      background-position: center;
       cursor: pointer;
       transition: transform 0.3s ease;
-      animation: chestIdle 2s ease-in-out infinite;
       position: relative;
+      /* Default to first frame of idle sequence (frame 1) */
+      background-position: 0px 0px;
+      animation: chestIdle 800ms steps(6) infinite;
     }
 
+    /* Idle animation - frames 1-6 (0-5 in 0-indexed) */
     @keyframes chestIdle {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-5px); }
+      0% { background-position: 0px 0px; }      /* Frame 1 */
+      16.66% { background-position: -128px 0px; }   /* Frame 2 */
+      33.33% { background-position: -256px 0px; }   /* Frame 3 */
+      50% { background-position: -384px 0px; }      /* Frame 4 */
+      66.66% { background-position: -512px 0px; }   /* Frame 5 */
+      83.33% { background-position: -640px 0px; }   /* Frame 6 */
+      100% { background-position: 0px 0px; }        /* Back to Frame 1 */
     }
 
+    /* Opening animation - frames 7-20 (6-19 in 0-indexed) */
     .chest.opening {
-      animation: chestOpen 1.2s ease-out forwards;
+      animation: chestOpen 1200ms steps(14) 1 forwards;
     }
 
     @keyframes chestOpen {
-      0% { transform: translateY(0px) scale(1); }
-      20% { transform: translateY(-10px) scale(1.05); }
-      40% { transform: translateY(-15px) scale(1.1); }
-      60% { transform: translateY(-10px) scale(1.05); }
-      100% { transform: translateY(0px) scale(1); }
+      0% { background-position: -768px 0px; }    /* Frame 7 */
+      7.14% { background-position: -896px 0px; }     /* Frame 8 */
+      14.28% { background-position: -1024px 0px; }   /* Frame 9 */
+      21.42% { background-position: -1152px 0px; }   /* Frame 10 */
+      28.57% { background-position: -1280px 0px; }   /* Frame 11 */
+      35.71% { background-position: -1408px 0px; }   /* Frame 12 */
+      42.85% { background-position: -1536px 0px; }   /* Frame 13 */
+      50% { background-position: -1664px 0px; }      /* Frame 14 */
+      57.14% { background-position: -1792px 0px; }   /* Frame 15 */
+      64.28% { background-position: -1920px 0px; }   /* Frame 16 */
+      71.42% { background-position: -2048px 0px; }   /* Frame 17 */
+      78.57% { background-position: -2176px 0px; }   /* Frame 18 */
+      85.71% { background-position: -2304px 0px; }   /* Frame 19 */
+      92.85% { background-position: -2432px 0px; }   /* Frame 20 */
+      100% { background-position: -2432px 0px; }     /* Hold last frame */
     }
 
     .card {
