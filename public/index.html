@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Random Number Picker</title>
+  <title>Chest Card Picker</title>
   <style>
     * {
       margin: 0;
@@ -37,19 +37,19 @@
 
     .container {
       text-align: center;
-      padding: 40px 20px;
+      padding: 20px;
       max-width: 400px;
       width: 100%;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 215, 0, 0.2);
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
     }
 
     h1 {
       font-size: 2.5em;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
       background-size: 200% 200%;
       -webkit-background-clip: text;
@@ -58,6 +58,7 @@
       animation: goldShimmer 3s ease-in-out infinite;
       text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
       font-weight: bold;
+      margin-top: 20px;
     }
 
     @keyframes goldShimmer {
@@ -65,64 +66,125 @@
       50% { background-position: 100% 50%; }
     }
 
-    .number-display {
-      min-height: 120px;
+    .game-area {
+      flex: 1;
+      width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      margin-bottom: 30px;
-      background: rgba(255, 215, 0, 0.1);
-      border: 2px solid rgba(255, 215, 0, 0.3);
-      border-radius: 15px;
       position: relative;
-      overflow: hidden;
     }
 
-    .number-display::before {
-      content: '';
+    .chest {
+      width: 128px;
+      height: 64px;
+      background-image: url('chest.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      animation: chestIdle 2s ease-in-out infinite;
+      position: relative;
+    }
+
+    @keyframes chestIdle {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .chest.opening {
+      animation: chestOpen 1.2s ease-out forwards;
+    }
+
+    @keyframes chestOpen {
+      0% { transform: translateY(0px) scale(1); }
+      20% { transform: translateY(-10px) scale(1.05); }
+      40% { transform: translateY(-15px) scale(1.1); }
+      60% { transform: translateY(-10px) scale(1.05); }
+      100% { transform: translateY(0px) scale(1); }
+    }
+
+    .card {
+      width: 140px;
+      height: 220px;
       position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.6), transparent);
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0.05);
+      opacity: 0;
+      background-image: url('1.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
       border-radius: 15px;
-      animation: borderGlow 2s linear infinite;
-      z-index: -1;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Arial', sans-serif;
+      z-index: 10;
+      position: relative;
     }
 
-    @keyframes borderGlow {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .card.show {
+      animation: cardReveal 0.6s ease-out forwards;
     }
 
-    .picked-number {
+    @keyframes cardReveal {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.05);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -200%) scale(1);
+      }
+    }
+
+    .card-number {
       font-size: 4em;
       font-weight: bold;
       color: #ffd700;
-      text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.8);
       margin-bottom: 10px;
-      animation: numberPulse 1s ease-out;
+      animation: numberGlow 2s ease-in-out infinite;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 215, 0, 0.5);
     }
 
-    @keyframes numberPulse {
-      0% { transform: scale(0); opacity: 0; }
-      50% { transform: scale(1.2); opacity: 0.8; }
-      100% { transform: scale(1); opacity: 1; }
+    @keyframes numberGlow {
+      0%, 100% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+      50% { text-shadow: 0 0 30px rgba(255, 215, 0, 1); }
     }
 
-    .number-label {
-      font-size: 1.1em;
+    .card-label {
+      font-size: 1em;
       color: rgba(255, 215, 0, 0.8);
       text-transform: uppercase;
       letter-spacing: 2px;
     }
 
-    .placeholder-text {
-      font-size: 1.5em;
-      color: rgba(255, 255, 255, 0.5);
-      font-style: italic;
+    .card-border {
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border-radius: 15px;
+      background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700, #ffc107);
+      background-size: 400% 400%;
+      animation: borderShine 3s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes borderShine {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
 
     .pick-button {
@@ -141,6 +203,7 @@
       position: relative;
       overflow: hidden;
       min-width: 200px;
+      margin-bottom: 30px;
     }
 
     .pick-button::before {
@@ -185,13 +248,14 @@
     }
 
     .stats {
-      margin-top: 30px;
       display: flex;
       justify-content: space-around;
-      padding: 20px;
+      padding: 15px;
       background: rgba(255, 215, 0, 0.05);
       border-radius: 10px;
       border: 1px solid rgba(255, 215, 0, 0.2);
+      margin-bottom: 20px;
+      width: 100%;
     }
 
     .stat {
@@ -199,14 +263,14 @@
     }
 
     .stat-value {
-      font-size: 1.5em;
+      font-size: 1.2em;
       font-weight: bold;
       color: #ffd700;
       display: block;
     }
 
     .stat-label {
-      font-size: 0.9em;
+      font-size: 0.8em;
       color: rgba(255, 255, 255, 0.7);
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -214,42 +278,77 @@
 
     .error {
       color: #ff4444;
-      margin-top: 20px;
-      padding: 15px;
+      margin: 10px 0;
+      padding: 10px;
       background: rgba(255, 68, 68, 0.1);
       border: 1px solid rgba(255, 68, 68, 0.3);
       border-radius: 10px;
+      font-size: 0.9em;
+    }
+
+    .sparkles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #ffd700;
+      border-radius: 50%;
+      animation: sparkle 1s ease-out forwards;
+    }
+
+    @keyframes sparkle {
+      0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1) rotate(180deg);
+        opacity: 0;
+      }
     }
 
     @media (max-width: 480px) {
-      .container {
-        margin: 20px;
-        padding: 30px 15px;
-      }
-      
       h1 {
         font-size: 2em;
       }
       
-      .picked-number {
+      .card {
+        width: 120px;
+        height: 180px;
+      }
+      
+      .card-number {
         font-size: 3em;
+      }
+      
+      .chest {
+        width: 100px;
+        height: 50px;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Random Picker</h1>
+    <h1>Magical Chest</h1>
     
-    <div class="number-display">
-      <div id="numberResult">
-        <div class="placeholder-text">Click to pick a number</div>
+    <div class="game-area">
+      <div class="sparkles" id="sparkles"></div>
+      
+      <div class="chest" id="chest"></div>
+      
+      <div class="card" id="card">
+        <div class="card-border"></div>
+        <div class="card-number" id="cardNumber">?</div>
+        <div class="card-label">Your Number</div>
       </div>
     </div>
-
-    <button id="pickBtn" class="pick-button">
-      <span id="buttonText">Pick Random</span>
-    </button>
 
     <div class="stats" id="stats" style="display: none;">
       <div class="stat">
@@ -258,9 +357,13 @@
       </div>
       <div class="stat">
         <span id="pickCount" class="stat-value">0</span>
-        <span class="stat-label">Total Picks</span>
+        <span class="stat-label">Cards Drawn</span>
       </div>
     </div>
+
+    <button id="pickBtn" class="pick-button">
+      <span id="buttonText">Open Chest</span>
+    </button>
 
     <div id="errorMsg" class="error" style="display: none;"></div>
   </div>
@@ -268,71 +371,120 @@
   <script>
     const pickBtn = document.getElementById('pickBtn');
     const buttonText = document.getElementById('buttonText');
-    const numberResult = document.getElementById('numberResult');
+    const chest = document.getElementById('chest');
+    const card = document.getElementById('card');
+    const cardNumber = document.getElementById('cardNumber');
     const stats = document.getElementById('stats');
     const errorMsg = document.getElementById('errorMsg');
     const totalItemsSpan = document.getElementById('totalItems');
     const pickCountSpan = document.getElementById('pickCount');
+    const sparkles = document.getElementById('sparkles');
 
     // Load initial stats
     loadStats();
 
-    pickBtn.addEventListener('click', async () => {
+    // Auto-trigger after 2 seconds (like the original timer)
+    setTimeout(() => {
+      if (!pickBtn.disabled) {
+        buttonPressed();
+      }
+    }, 2000);
+
+    pickBtn.addEventListener('click', buttonPressed);
+
+    async function buttonPressed() {
       if (pickBtn.disabled) return;
 
-      // Reset error
+      // Reset error and hide previous card
       errorMsg.style.display = 'none';
+      card.classList.remove('show');
 
       // Set loading state
       pickBtn.disabled = true;
       pickBtn.classList.add('loading');
-      buttonText.textContent = 'Picking...';
+      buttonText.textContent = 'Opening...';
+      
+      // Trigger chest opening animation
+      chest.classList.add('opening');
       
       try {
-        const res = await fetch('/api/randomPicker', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'pickRandom' })
-        });
-
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-        }
-
-        const data = await res.json();
+        // Simulate API call (replace with your actual API)
+        const randomNumber = await getRandomNumber();
         
-        if (data.success) {
-          // Show the picked number with animation
-          numberResult.innerHTML = `
-            <div class="picked-number">${data.pickedNumber}</div>
-            <div class="number-label">Picked Number</div>
-          `;
-          
-          // Update stats
-          setTimeout(loadStats, 1000);
-        } else {
-          throw new Error(data.error || 'Failed to pick number');
-        }
+        // Show card after chest animation (300ms delay like original)
+        setTimeout(() => {
+          showCard(randomNumber);
+          createSparkles();
+        }, 300);
+        
+        // Update stats after animation
+        setTimeout(loadStats, 1000);
+        
       } catch (err) {
         console.error(err);
         errorMsg.textContent = `Error: ${err.message}`;
         errorMsg.style.display = 'block';
+        
+        // Reset chest state
+        setTimeout(() => {
+          chest.classList.remove('opening');
+        }, 1200);
       } finally {
-        // Reset button state
-        pickBtn.disabled = false;
-        pickBtn.classList.remove('loading');
-        buttonText.textContent = 'Pick Again';
+        // Reset button state after chest animation
+        setTimeout(() => {
+          pickBtn.disabled = false;
+          pickBtn.classList.remove('loading');
+          buttonText.textContent = 'Open Again';
+          chest.classList.remove('opening');
+        }, 1200);
       }
-    });
+    }
+
+    function showCard(number) {
+      cardNumber.textContent = number;
+      card.classList.add('show');
+    }
+
+    function createSparkles() {
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          const sparkle = document.createElement('div');
+          sparkle.className = 'sparkle';
+          sparkle.style.left = Math.random() * 100 + '%';
+          sparkle.style.top = Math.random() * 100 + '%';
+          sparkles.appendChild(sparkle);
+          
+          setTimeout(() => {
+            sparkle.remove();
+          }, 1000);
+        }, i * 50);
+      }
+    }
+
+    async function getRandomNumber() {
+      const res = await fetch('/api/randomPicker', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'pickRandom' })
+      });
+      
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      }
+      
+      const data = await res.json();
+      
+      if (data.success) {
+        return data.pickedNumber;
+      } else {
+        throw new Error(data.error || 'Failed to pick number');
+      }
+    }
 
     async function loadStats() {
       try {
         const res = await fetch('/api/randomPicker');
-        
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-        }
-        
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
         const data = await res.json();
         
         if (data.success) {
